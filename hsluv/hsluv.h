@@ -94,26 +94,22 @@ namespace melatonin
         }
     }
 
-    double
-        intersect_line_line (const Bounds* line1, const Bounds* line2)
+    static double intersect_line_line (const Bounds* line1, const Bounds* line2)
     {
         return (line1->b - line2->b) / (line2->a - line1->a);
     }
 
-    double
-        dist_from_pole_squared (double x, double y)
+    static double dist_from_pole_squared (double x, double y)
     {
         return x * x + y * y;
     }
 
-    double
-        ray_length_until_intersect (double theta, const Bounds* line)
+    static double ray_length_until_intersect (double theta, const Bounds* line)
     {
         return line->b / (std::sin (theta) - line->a * std::cos (theta));
     }
 
-    double
-        max_safe_chroma_for_l (double l)
+    static double max_safe_chroma_for_l (double l)
     {
         double min_len_squared = std::numeric_limits<double>::max();
         Bounds bounds[6];
@@ -136,8 +132,7 @@ namespace melatonin
         return sqrt (min_len_squared);
     }
 
-    double
-        max_chroma_for_lh (double l, double h)
+    static double max_chroma_for_lh (double l, double h)
     {
         double min_len = std::numeric_limits<double>::max();
         double hrad = h * 0.01745329251994329577; /* (2 * pi / 360) */
@@ -155,15 +150,13 @@ namespace melatonin
         return min_len;
     }
 
-    double
-        dot_product (const Triplet* t1, const Triplet* t2)
+    static double dot_product (const Triplet* t1, const Triplet* t2)
     {
         return (t1->a * t2->a + t1->b * t2->b + t1->c * t2->c);
     }
 
     /* Used for rgb conversions */
-    double
-        from_linear (double c)
+    static double from_linear (double c)
     {
         if (c <= 0.0031308)
             return 12.92 * c;
@@ -171,8 +164,7 @@ namespace melatonin
             return 1.055 * pow (c, 1.0 / 2.4) - 0.055;
     }
 
-    double
-        to_linear (double c)
+    static double to_linear (double c)
     {
         if (c > 0.04045)
             return pow ((c + 0.055) / 1.055, 2.4);
@@ -206,8 +198,7 @@ namespace melatonin
  * illuminant D65, so Yn (see refY in Maxima file) equals 1. The formula is
  * simplified accordingly.
  */
-    double
-        y2l (double y)
+    static double y2l (double y)
     {
         if (y <= epsilon)
             return y * kappa;
@@ -215,8 +206,7 @@ namespace melatonin
             return 116.0 * cbrt (y) - 16.0;
     }
 
-    double
-        l2y (double l)
+    static double l2y (double l)
     {
         if (l <= 8.0)
         {

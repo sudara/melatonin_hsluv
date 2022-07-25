@@ -21,40 +21,32 @@ namespace melatonin
 
     struct HSLuv
     {
+        // Hue. Between 0.0 and 360.0.
+        // Saturation. Between 0.0 and 100.0.
+        // Lightness. Between 0.0 and 100.0.
         double hue;
         double saturation;
         double lightness;
-
         [[nodiscard]] HSLuv withLightness (double amount) const
         {
             jassert (amount <= 100);
             return { hue, saturation, lightness + amount };
         }
-        static juce::Colour toColour();
+
+        juce::Colour toColour()
+        {
+            double r, g, b;
+            hsluv2rgb (hue, saturation, lightness, &r, &g, &b);
+            return juce::Colour::fromRGB (static_cast<uint8_t> (std::floor (r * 255.999)),
+                static_cast<uint8_t> (std::floor (g * 255.999)),
+                static_cast<uint8_t> (std::floor (b * 255.999)));
+        }
+
+        static HSLuv fromColour (juce::Colour color)
+        {
+            HSLuv hsl {};
+            rgb2hsluv (color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0, &hsl.hue, &hsl.saturation, &hsl.lightness);
+            return hsl;
+        }
     };
-
-    // Hue. Between 0.0 and 360.0.
-    // Saturation. Between 0.0 and 100.0.
-    // Lightness. Between 0.0 and 100.0.
-    static juce::Colour colourFromHSLuv (HSLuv hsl)
-    {
-        double r, g, b;
-        hsluv2rgb (hsl.hue, hsl.saturation, hsl.lightness, &r, &g, &b);
-        return juce::Colour::fromRGB (static_cast<uint8_t> (std::floor (r * 255.999)),
-            static_cast<uint8_t> (std::floor (g * 255.999)),
-            static_cast<uint8_t> (std::floor (b * 255.999)));
-    }
-
-    static HSLuv colourToHSLuv (const juce::Colour& color)
-    {
-        HSLuv hsl {};
-        rgb2hsluv (color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0, &hsl.hue, &hsl.saturation, &hsl.lightness);
-        return hsl;
-    }
-
-    juce::Colour HSLuv::toColour()
-    {
-        return colourFromHSLuv (*this);
-    }
-
 }
