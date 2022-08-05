@@ -30,7 +30,13 @@ namespace melatonin
         [[nodiscard]] HSLuv withLightness (double amount) const
         {
             jassert (amount <= 100);
-            return { hue, saturation, lightness + amount };
+            return { hue, saturation, amount };
+        }
+
+        [[nodiscard]] HSLuv withSaturation (double amount) const
+        {
+            jassert (amount <= 100);
+            return { hue, amount, lightness };
         }
 
         juce::Colour toColour()
