@@ -18,7 +18,6 @@ END_JUCE_MODULE_DECLARATION
 
 namespace melatonin
 {
-
     struct HSLuv
     {
         // Hue. Between 0.0 and 360.0.
@@ -27,6 +26,7 @@ namespace melatonin
         double hue;
         double saturation;
         double lightness;
+
         [[nodiscard]] HSLuv withLightness (double amount) const
         {
             jassert (amount <= 100);
@@ -39,7 +39,7 @@ namespace melatonin
             return { hue, amount, lightness };
         }
 
-        juce::Colour toColour()
+        [[nodiscard]] juce::Colour toColour() const
         {
             double r, g, b;
             hsluv2rgb (hue, saturation, lightness, &r, &g, &b);
@@ -55,4 +55,25 @@ namespace melatonin
             return hsl;
         }
     };
+
+    [[nodiscord]] static juce::Colour withLightnessAndSaturation (const juce::Colour& color, const double lightness, const double saturation)
+    {
+        jassert (lightness <= 100);
+        jassert (saturation <= 100);
+        return HSLuv::fromColour(color).withLightness (lightness).withSaturation(saturation).toColour();
+    }
+
+    [[nodiscord]] static juce::Colour withLightness (const juce::Colour& color, const double amount)
+    {
+        jassert (amount <= 100);
+        return HSLuv::fromColour(color).withLightness (amount).toColour();
+    }
+
+    [[nodiscord]] static juce::Colour withSaturation (const juce::Colour& color, const double amount)
+    {
+        jassert (amount <= 100);
+        return HSLuv::fromColour(color).withSaturation (amount).toColour();
+    }
+
+
 }
