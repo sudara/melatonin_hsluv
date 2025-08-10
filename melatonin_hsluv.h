@@ -56,24 +56,30 @@ namespace melatonin
         }
     };
 
-    [[nodiscord]] static juce::Colour withLightnessAndSaturation (const juce::Colour& color, const double lightness, const double saturation)
+    [[nodiscard]] [[maybe_unused]] static juce::Colour withLightnessAndSaturation (const juce::Colour& color, const double lightness, const double saturation)
     {
         jassert (lightness <= 100);
         jassert (saturation <= 100);
-        return HSLuv::fromColour(color).withLightness (lightness).withSaturation(saturation).toColour();
+        return HSLuv::fromColour (color).withLightness (lightness).withSaturation (saturation).toColour();
     }
 
-    [[nodiscord]] static juce::Colour withLightness (const juce::Colour& color, const double amount)
+    [[nodiscard]] [[maybe_unused]] static juce::Colour withLightness (const juce::Colour& color, const double amount)
     {
         jassert (amount <= 100);
-        return HSLuv::fromColour(color).withLightness (amount).toColour();
+        return HSLuv::fromColour (color).withLightness (amount).toColour();
     }
 
-    [[nodiscord]] static juce::Colour withSaturation (const juce::Colour& color, const double amount)
+    [[nodiscard]] [[maybe_unused]] static juce::Colour withDeltaLightness (const juce::Colour& color, const double delta)
+    {
+        jassert (delta <= 100);
+        auto hsluv = HSLuv::fromColour (color);
+        return hsluv.withLightness (hsluv.lightness + delta).toColour();
+    }
+
+    [[nodiscard]] [[maybe_unused]] static juce::Colour withSaturation (const juce::Colour& color, const double amount)
     {
         jassert (amount <= 100);
-        return HSLuv::fromColour(color).withSaturation (amount).toColour();
+        return HSLuv::fromColour (color).withSaturation (amount).toColour();
     }
-
 
 }
